@@ -1,36 +1,179 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Personal Assistant SaaS 🤖🚀
 
-## Getting Started
+A fullstack **AI-powered Personal Assistant SaaS application** built with **Next.js, React, Convex, and Eden AI**.
 
-First, run the development server:
+This project demonstrates how to build a modern, scalable AI application capable of handling real-time conversations, user personalization, and monetization through token-based usage.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🧠 About the Project
+
+This application allows users to interact with **custom AI assistants** through a modern chat interface.
+
+It combines:
+
+- Real-time backend (Convex)
+- AI model orchestration (Eden AI)
+- Modern frontend (Next.js + React)
+
+The result is a **production-ready SaaS platform** with authentication, assistant customization, and scalable architecture. :contentReference[oaicite:0]{index=0}
+
+---
+
+## 🚀 Core Features
+
+### 🤖 AI Assistant System
+- Chat with AI assistants in real-time
+- Multiple AI assistants per user
+- Custom assistant personalities and configurations
+- Support for multiple AI models via Eden AI
+
+### ⚡ Real-Time Backend
+- Powered by Convex (serverless backend)
+- Instant chat updates
+- Persistent chat history per user
+
+### 🔐 Authentication & User Management
+- Secure login and session handling
+- Protected routes
+- User profiles and settings
+
+### 💬 Chat Experience
+- Interactive chat UI
+- Typing indicators
+- Error handling for API responses
+
+### 🎛️ Assistant Customization
+- Create, edit, and delete assistants
+- Configure:
+  - Name
+  - Personality
+  - Tone
+  - AI model
+
+### 💳 Monetization System
+- Token / credit-based usage system
+- Track AI usage per user
+- Payment integration (e.g., Razorpay)
+
+### 📊 Dashboard & UX
+- Sidebar navigation
+- Assistant selection interface
+- Responsive design (mobile + desktop)
+
+---
+
+## 🧰 Tech Stack
+
+| Technology | Role |
+|------------|------|
+| **Next.js** | Fullstack framework |
+| **React** | UI library |
+| **TypeScript** | Type safety |
+| **Convex** | Backend (real-time DB + functions) |
+| **Eden AI** | AI model aggregation |
+| **Tailwind CSS** | Styling |
+| **Axios** | API requests |
+| **Razorpay** *(optional)* | Payments |
+
+---
+
+## 📁 Project Structure
+ 
+```
+ai-assistant/
+├── app/
+│   ├── (auth)/            # Login and register pages
+│   ├── dashboard/         # Main workspace layout
+│   ├── assistants/        # AI assistant list and management
+│   ├── chat/              # Chat UI per assistant
+│   ├── profile/           # User profile and settings
+│   └── api/
+│       ├── ai/            # Eden AI API route
+│       └── payment/       # Razorpay webhooks
+├── components/            # Reusable UI components
+├── convex/                # Convex backend functions and schema
+├── lib/                   # Utility functions and helpers
+├── public/                # Static assets
+└── styles/                # Global styles (Tailwind)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Getting Started
+ 
+### Prerequisites
+ 
+- Node.js >= 18
+- A [Convex](https://www.convex.dev/) account
+- An [Eden AI](https://www.edenai.co/) account and API key
+- A [Razorpay](https://razorpay.com) account
+- A Google OAuth app (for authentication)
+### 1. Clone the Repository
+ 
+```bash
+git clone https://github.com/your-username/ai-personal-assistant.git
+cd ai-personal-assistant
+```
+ 
+### 2. Install Dependencies
+ 
+```bash
+npm install
+```
+ 
+### 3. Set Up Environment Variables
+ 
+Create a `.env.local` file in the root of your project:
+ 
+```env
+# Convex
+CONVEX_DEPLOYMENT=your_convex_deployment_url
+NEXT_PUBLIC_CONVEX_URL=your_convex_public_url
+ 
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+ 
+# Eden AI
+EDEN_AI_API_KEY=your_eden_ai_api_key
+ 
+# Razorpay
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+```
+ 
+### 4. Initialize Convex
+ 
+```bash
+npx convex dev
+```
+ 
+### 5. Run the Development Server
+ 
+```bash
+npm run dev
+```
+ 
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+ 
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Real-Time Backend (Convex)
+ 
+Convex handles chat history, user sessions, assistant configurations, and token balances in real time — no manual polling needed.
+ 
+### Credit & Token System
+ 
+Each API call deducts tokens from the user's balance stored in Convex. Users are notified when credits are low and can purchase more via Razorpay.
+ 
+---
+ 
+## 🚀 Deployment
+ 
+1. Push your project to a GitHub repository.
+2. Connect the repo to [Vercel](https://vercel.com).
+3. Add all environment variables in the Vercel dashboard.
+4. Deploy — Vercel handles the build and hosting automatically.
+   
+---
