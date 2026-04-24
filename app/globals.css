@@ -32,6 +32,16 @@
 		--ring: 240 10% 3.9%;
 
 		--radius: 0.5rem;
+
+		--color-1: oklch(66.2% 0.225 25.9);
+
+		--color-2: oklch(60.4% 0.26 302);
+
+		--color-3: oklch(69.6% 0.165 251);
+
+		--color-4: oklch(80.2% 0.134 225);
+
+		--color-5: oklch(90.7% 0.231 133);
 	}
 
 	.dark {
@@ -61,6 +71,11 @@
 		--border: 240 3.7% 15.9%;
 		--input: 240 3.7% 15.9%;
 		--ring: 240 4.9% 83.9%;
+		--color-1: oklch(66.2% 0.225 25.9);
+		--color-2: oklch(60.4% 0.26 302);
+		--color-3: oklch(69.6% 0.165 251);
+		--color-4: oklch(80.2% 0.134 225);
+		--color-5: oklch(90.7% 0.231 133);
 	}
 
 	* {
@@ -69,5 +84,19 @@
 
 	body {
 		@apply bg-background text-foreground;
+	}
+  .theme {
+		--animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+	}
+}
+
+@theme inline {
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+		}
+  100% {
+    background-position: 200%;
+		}
 	}
 }

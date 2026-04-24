@@ -3,15 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/AuthContext";
 import { api } from "@/convex/_generated/api";
-import { GetAuthUserData } from "@/services/GlobalAPI";
+import { getAuthUserData } from "@/services/GlobalAPI";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useMutation } from "convex/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 function SignIn() {
-  const createUser = useMutation(api.users.CreateUser);
+  const createUser = useMutation(api.users.createUser);
+  const router = useRouter();
+
   const { user, setUser } = useContext(AuthContext);
 
   const googleLogin = useGoogleLogin({
@@ -20,7 +23,7 @@ function SignIn() {
         localStorage.setItem("user_token", tokenResponse.access_token);
       }
 
-      const userInfo = await GetAuthUserData(tokenResponse.access_token);
+      const userInfo = await getAuthUserData(tokenResponse.access_token);
       const result = await createUser({
         name: userInfo.name,
         email: userInfo.email,
@@ -28,6 +31,7 @@ function SignIn() {
       });
       console.log({ result });
       setUser(result);
+      router.replace("/ai-assistants");
     },
     onError: (errorResponse) => console.log(errorResponse),
   });
