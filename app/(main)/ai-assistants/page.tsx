@@ -9,18 +9,8 @@ import { useConvex, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AuthContext } from "@/context/AuthContext";
 import { Loader2Icon } from "lucide-react";
-import { get } from "node:https";
 import { useRouter } from "next/navigation";
-
-export type AssistantType = {
-  id: number;
-  title: string;
-  name: string;
-  image: string;
-  instruction: string;
-  userInstruction: string;
-  sampleQuestions: string[];
-};
+import { AssistantType } from "@/types/assistant-type";
 
 function AiAssistants() {
   const [isLoading, setIsLoading] = useState(false);
