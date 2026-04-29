@@ -24,7 +24,7 @@ function AiAssistants() {
 
   const getAssistants = async () => {
     const result = await convex.query(api.assistants.getAllAssistants, {
-      uid: user?.uid,
+      uid: user?._id,
     });
 
     if (result.length > 0) {

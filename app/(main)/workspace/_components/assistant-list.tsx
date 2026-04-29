@@ -12,13 +12,16 @@ import { AssistantContext } from "@/context/AssistantContext";
 function AssistantList() {
   const { user } = useContext(AuthContext);
   const convex = useConvex();
+
   const [assistantList, setAssistantList] = useState<AssistantType[]>([]);
   const { assistant, setAssistant } = useContext(AssistantContext);
 
   const getAssistants = async () => {
     const result = await convex.query(api.assistants.getAllAssistants, {
-      uid: user?.uid,
+      uid: user?._id,
     });
+
+    console.log({ result });
     setAssistantList(result);
   };
 
@@ -26,7 +29,7 @@ function AssistantList() {
     if (user) {
       getAssistants();
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="relative p-5 bg-secondary border-r-[1px] h-screen">
@@ -38,7 +41,7 @@ function AssistantList() {
         {assistantList.map((_assistant, index) => (
           <div
             key={index}
-            className={`flex mt-2 p-2 gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer ${_assistant.id === assistant.id ? "bg-gray-200 dark:bg-slate-700" : ""}`}
+            className={`flex mt-2 p-2 gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer ${_assistant?.id === assistant?.id ? "bg-gray-200 dark:bg-slate-700" : ""}`}
             onClick={() => setAssistant(_assistant)}
           >
             <Image
