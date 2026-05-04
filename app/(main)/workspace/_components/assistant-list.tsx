@@ -8,6 +8,7 @@ import { api } from "@/convex/_generated/api";
 import { AssistantType } from "@/types/assistant-type";
 import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
+import { BlurFade } from "@/components/ui/blur-fade";
 
 function AssistantList() {
   const { user } = useContext(AuthContext);
@@ -29,7 +30,7 @@ function AssistantList() {
     if (user) {
       getAssistants();
     }
-  }, [user]);
+  }, [user && assistant == null]);
 
   return (
     <div className="relative p-5 bg-secondary border-r-[1px] h-screen">
@@ -39,25 +40,27 @@ function AssistantList() {
 
       <div className="mt-5">
         {assistantList.map((_assistant, index) => (
-          <div
-            key={index}
-            className={`flex mt-2 p-2 gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer ${_assistant?.id === assistant?.id ? "bg-gray-200 dark:bg-slate-700" : ""}`}
-            onClick={() => setAssistant(_assistant)}
-          >
-            <Image
-              className="rounded-lg w-[60px] h-[60px] object-cover"
-              src={_assistant?.image}
-              alt={_assistant?.name}
-              width={50}
-              height={50}
-            />
-            <div>
-              <h2 className="font-bold">{_assistant?.name}</h2>
-              <h2 className="text-gray-600 text-sm dark:text-gray-400">
-                {_assistant?.title}
-              </h2>
+          <BlurFade key={_assistant.image} delay={0.25 + index * 0.05} inView>
+            <div
+              key={index}
+              className={`flex mt-2 p-2 gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer ${_assistant?.id === assistant?.id ? "bg-gray-200 dark:bg-slate-700" : ""}`}
+              onClick={() => setAssistant(_assistant)}
+            >
+              <Image
+                className="rounded-lg w-[60px] h-[60px] object-cover"
+                src={_assistant?.image}
+                alt={_assistant?.name}
+                width={50}
+                height={50}
+              />
+              <div>
+                <h2 className="font-bold">{_assistant?.name}</h2>
+                <h2 className="text-gray-600 text-sm dark:text-gray-400">
+                  {_assistant?.title}
+                </h2>
+              </div>
             </div>
-          </div>
+          </BlurFade>
         ))}
       </div>
 
