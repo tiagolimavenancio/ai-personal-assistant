@@ -1,5 +1,6 @@
 import AssistantList from "./_components/assistant-list";
 import AssistantSettings from "./_components/assistant-settings";
+import ChatUI from "./_components/chat-ui";
 
 function Workspace() {
   return (
@@ -9,8 +10,7 @@ function Workspace() {
           <AssistantList />
         </div>
         <div className="md:col-span-4 lg:col-span-3">
-          CHAT UI
-          {/*Chat UI*/}
+          <ChatUI />
         </div>
         <div className="hidden lg:block">
           <AssistantSettings />

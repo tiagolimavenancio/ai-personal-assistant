@@ -21,8 +21,6 @@ function AssistantList() {
     const result = await convex.query(api.assistants.getAllAssistants, {
       uid: user?._id,
     });
-
-    console.log({ result });
     setAssistantList(result);
   };
 
