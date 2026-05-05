@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { provider, userInput } = await req.json();
+  const { provider, userInput, aiResp } = await req.json();
 
   const url = "https://api.edenai.run/v2/multimodal/chat";
   const headers = {
@@ -23,6 +23,21 @@ export async function POST(req: NextRequest) {
           },
         ],
       },
+      ...(aiResp
+        ? [
+            {
+              role: "assistant",
+              content: [
+                {
+                  type: "text",
+                  content: {
+                    text: aiResp,
+                  },
+                },
+              ],
+            },
+          ]
+        : []),
     ],
   });
 
@@ -37,7 +52,7 @@ export async function POST(req: NextRequest) {
 
   const responseData = {
     role: "assistant",
-    content: result[provider].generated_text,
+    content: result[provider]?.generated_text,
   };
 
   return NextResponse.json(responseData);
