@@ -11,18 +11,34 @@ import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/ui/blur-fade";
 import AddNewAssistant from "./add-new-assistant";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, UserCircle2 } from "lucide-react";
+import Profile from "./profile";
+
 function AssistantList() {
   const { user } = useContext(AuthContext);
+  const { assistant, setAssistant } = useContext(AssistantContext);
   const convex = useConvex();
 
   const [assistantList, setAssistantList] = useState<AssistantType[]>([]);
-  const { assistant, setAssistant } = useContext(AssistantContext);
+  const [loading, setLoading] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
 
   const getAssistants = async () => {
+    setLoading(true);
     const result = await convex.query(api.assistants.getAllAssistants, {
       uid: user?._id,
     });
     setAssistantList(result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -66,21 +82,43 @@ function AssistantList() {
         ))}
       </div>
 
-      <div className="absolute bottom-10 flex gap-3 items-center hover:bg-gray-200 w-[87%] p-2 rounded-xl cursor-pointer">
-        <Image
-          src={user?.picture}
-          alt="user"
-          width={35}
-          height={35}
-          className="rounded-full"
-        />
-        <div>
-          <h2 className="font-bold">{user?.name}</h2>
-          <h2 className="text-gray-400 text-sm">
-            {user?.orderId ? "Pro Plan" : "Free Plan"}
-          </h2>
-        </div>
+      <div className="absolute flex bottom-10">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost">
+              <div className="flex gap-3 items-center hover:bg-gray-200 w-full p-2 rounded-xl cursor-pointer">
+                <Image
+                  src={user?.picture}
+                  alt="user"
+                  width={35}
+                  height={35}
+                  className="rounded-full"
+                />
+                <div>
+                  <h2 className="font-bold">{user?.name}</h2>
+                  <h2 className="text-gray-400 text-sm">
+                    {user?.orderId ? "Pro Plan" : "Free Plan"}
+                  </h2>
+                </div>
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[200px]">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setOpenProfile(true)}>
+                <UserCircle2 /> Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <LogOut /> Logout
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
+
+      <Profile open={openProfile} onClose={() => setOpenProfile(false)} />
     </div>
   );
 }
