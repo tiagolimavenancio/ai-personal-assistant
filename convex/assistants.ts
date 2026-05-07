@@ -29,6 +29,7 @@ export const getAllAssistants = query({
     const result = await ctx.db
       .query("assistants")
       .filter((q) => q.eq(q.field("uid"), args.uid))
+      .order("desc")
       .collect();
     return result;
   },

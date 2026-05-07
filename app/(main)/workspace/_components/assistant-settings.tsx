@@ -75,7 +75,7 @@ function AssistantSettings() {
           </div>
         </BlurFade>
 
-        <BlurFade delay={0.25}>
+        <BlurFade delay={0.25 * 2}>
           <div className="mt-4">
             <h2 className="text-gray-500">Model:</h2>
             <Select
@@ -105,7 +105,7 @@ function AssistantSettings() {
           </div>
         </BlurFade>
 
-        <BlurFade delay={0.25}>
+        <BlurFade delay={0.25 * 3}>
           <div className="mt-4">
             <h2 className="text-gray-500">Instructions:</h2>
             <Textarea

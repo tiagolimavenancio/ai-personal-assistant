@@ -1,14 +1,15 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
+import Image from "next/image";
+import { useConvex } from "convex/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useConvex } from "convex/react";
 import { AuthContext } from "@/context/AuthContext";
 import { api } from "@/convex/_generated/api";
 import { AssistantType } from "@/types/assistant-type";
-import Image from "next/image";
 import { AssistantContext } from "@/context/AssistantContext";
 import { BlurFade } from "@/components/ui/blur-fade";
+import AddNewAssistant from "./add-new-assistant";
 
 function AssistantList() {
   const { user } = useContext(AuthContext);
@@ -28,12 +29,15 @@ function AssistantList() {
     if (user) {
       getAssistants();
     }
-  }, [user && assistant == null]);
+  }, [user && assistant === null]);
 
   return (
     <div className="relative p-5 bg-secondary border-r-[1px] h-screen">
       <h2 className="font-bold text-lg">Your Personal AI Asssitant</h2>
-      <Button className="w-full mt-3">+ Add New Assistant</Button>
+      <AddNewAssistant>
+        <Button className="w-full mt-3">+ Add New Assistant</Button>
+      </AddNewAssistant>
+
       <Input className="bg-white mt-3" placeholder="Search" />
 
       <div className="mt-5">
