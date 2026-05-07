@@ -10,6 +10,10 @@ import AiModelOptions from "@/services/AiModelOptions";
 import { AssistantContext } from "@/context/AssistantContext";
 import { MessageType } from "@/types/message-type";
 import Image from "next/image";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
+import { AuthContext } from "@/context/AuthContext";
+import { AssistantType } from "@/types/assistant-type";
 
 function ChatUI() {
   const [input, setInput] = useState<string>("");
@@ -18,6 +22,9 @@ function ChatUI() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
+
+  const updateTokens = useMutation(api.users.updateTokens);
+  const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (messageRef.current) {
@@ -60,6 +67,26 @@ function ChatUI() {
     setMessages((prev) => prev.slice(0, -1));
     setMessages((prev) => [...prev, result.data]);
     setLoading(false);
+
+    handleUpdateUserToken(result.data?.content);
+  };
+
+  const handleUpdateUserToken = async (resp: string) => {
+    const tokenCount = resp.match(/\S+/g)?.length || 0;
+
+    console.log({ tokenCount });
+
+    const result = await updateTokens({
+      credits: user?.credits - tokenCount,
+      uid: user?._id,
+    });
+
+    setUser((prev: AssistantType) => ({
+      ...prev,
+      credits: user?.credits - tokenCount,
+    }));
+
+    console.log({ result });
   };
 
   return (
