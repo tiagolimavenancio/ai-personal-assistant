@@ -16,6 +16,16 @@ import { Loader2Icon, WalletCardsIcon } from "lucide-react";
 import axios from "axios";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import convertToSubcurrency from "@/lib/convertToSubcurrency";
+import CheckoutPage from "../../_components/checkout-page";
+
+if (!process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY) {
+  throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined");
+}
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 function Profile({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user } = useAuth();
@@ -24,16 +34,13 @@ function Profile({ open, onClose }: { open: boolean; onClose: () => void }) {
 
   const updateUserOrder = useMutation(api.users.updateTokens);
 
+  const amount = 49.99;
+
   useEffect(() => {
     setMaxTokens(user?.orderId ? 10000 : 50000);
   }, [user?.orderId]);
 
-  const handleGenerateSubscription = async () => {
-    setLoading(true);
-    const result = await axios.post("/api/create-subscription");
-    console.log({ result });
-    setLoading(false);
-  };
+  const handleGenerateSubscription = async () => {};
 
   const handleMakePayment = async (subscriptionId: string) => {};
 
@@ -75,38 +82,16 @@ function Profile({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </h2>
               </div>
 
-              {!user?.orderId ? (
-                <div className="mt-4 p-4 border rounded-xl">
-                  <div className="flex justify-between">
-                    <div>
-                      <h2 className="font-bold text-lg">Pro Plan</h2>
-                      <h2>500,000 Tokens</h2>
-                    </div>
-                    <h2 className="font-bold text-lg">$10/Month</h2>
-                  </div>
-                  <hr className="my-3" />
-                  <Button
-                    className="w-full"
-                    disabled={loading}
-                    onClick={handleGenerateSubscription}
-                  >
-                    {loading ? (
-                      <Loader2Icon className="animate-spin" />
-                    ) : (
-                      <WalletCardsIcon />
-                    )}
-                    Upgrade (10$)
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  className="mt-4 w-full"
-                  variant="secondary"
-                  onClick={handleCancelSubscription}
-                >
-                  Cancel Subscription
-                </Button>
-              )}
+              <Elements
+                stripe={stripePromise}
+                options={{
+                  mode: "payment",
+                  currency: "usd",
+                  amount: convertToSubcurrency(amount),
+                }}
+              >
+                <CheckoutPage amount={amount} />
+              </Elements>
             </div>
           </DialogDescription>
         </DialogHeader>
