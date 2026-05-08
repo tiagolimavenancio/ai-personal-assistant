@@ -90,53 +90,77 @@ function ChatUI() {
   };
 
   return (
-    <div className="mt-20 p-6 relative h-[88vh]">
+    <div className="h-full flex flex-col p-4 md:p-6 relative">
       {messages.length === 0 && <EmptyChatState />}
 
-      <div ref={messageRef} className="h-[75vh] overflow-y-auto">
+      <div ref={messageRef} className="flex-1 overflow-y-auto scrollbar-thin py-4 space-y-4">
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex mb-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex animate-slide-up ${message.role === "user" ? "justify-end" : "justify-start"}`}
+            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex gap-3">
+            <div className={`flex gap-3 max-w-[85%] md:max-w-[75%] ${message.role === "user" ? "flex-row-reverse" : ""}`}>
               {message?.role === "assistant" && (
-                <Image
-                  className="w-[30px] h-[30px] rounded-full object-cover"
-                  src={assistant?.image}
-                  alt="assistant"
-                  width={100}
-                  height={100}
-                />
+                <div className="flex-shrink-0">
+                  <Image
+                    className="w-8 h-8 md:w-10 md:h-10 rounded-xl object-cover ring-2 ring-primary/20"
+                    src={assistant?.image}
+                    alt="assistant"
+                    width={40}
+                    height={40}
+                  />
+                </div>
               )}
 
               <div
-                className={`flex gap-3 p-3 rounded-lg  text-black ${message.role === "user" ? "bg-blue-300" : "bg-gray-100"}`}
+                className={`relative px-4 py-3 rounded-2xl ${
+                  message.role === "user" 
+                    ? "chat-bubble-user rounded-br-md shadow-lg shadow-primary/20" 
+                    : "chat-bubble-assistant rounded-bl-md shadow-lg shadow-secondary/20"
+                }`}
               >
                 {loading && messages?.length - 1 == index && (
-                  <Loader2Icon className="animate-spin" />
+                  <Loader2Icon className="animate-spin w-4 h-4 mb-1" />
                 )}
-                <h2>{message.content}</h2>
+                <p className={`text-sm leading-relaxed whitespace-pre-wrap ${message.role === "user" ? "text-white" : "text-foreground"}`}>
+                  {message.content}
+                </p>
+                {message.role === "assistant" && (
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-secondary rounded-full opacity-50" />
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-between p-5 gap-5 absolute bottom-5 w-[94%]">
-        <Input
-          value={input}
-          disabled={loading || user?.credits <= 0}
-          placeholder="Start typing here..."
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
-        />
-        <Button
-          disabled={loading || user?.credits <= 0}
-          onClick={onSendMessage}
-        >
-          <Send />
-        </Button>
+      <div className="p-4 border-t border-border/50 bg-background/80 backdrop-blur-sm">
+        <div className="flex gap-3 items-center">
+          <Input
+            value={input}
+            disabled={loading || user?.credits <= 0}
+            placeholder="Type your message..."
+            className="flex-1 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 py-6 rounded-xl"
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
+          />
+          <Button
+            disabled={loading || user?.credits <= 0 || !input.trim()}
+            onClick={onSendMessage}
+            className="px-6 py-6 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/30 transition-all duration-300"
+          >
+            <Send className="w-5 h-5" />
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2 text-center">
+          Press <kbd className="px-1.5 py-0.5 bg-secondary rounded text-[10px] font-mono">Enter</kbd> to send
+          {user?.credits !== undefined && (
+            <span className="ml-2 text-primary/70">
+              • {user.credits} credits remaining
+            </span>
+          )}
+        </p>
       </div>
     </div>
   );

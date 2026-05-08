@@ -15,7 +15,6 @@ function PaymentSuccess() {
     }, 1000);
 
     const timeout = setTimeout(() => {
-      router.refresh();
       router.replace("/workspace");
     }, 5000);
 

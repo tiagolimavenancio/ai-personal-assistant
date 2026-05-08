@@ -39,7 +39,6 @@ function Provider({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <AssistantContext.Provider value={{ assistant, setAssistant }}>
-        <Header />
         {children}
       </AssistantContext.Provider>
     </div>
