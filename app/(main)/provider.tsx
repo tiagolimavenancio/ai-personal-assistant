@@ -2,17 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import Header from "./_components/header";
-import { getAuthUserData } from "@/services/GlobalAPI";
-import { useContext, useEffect, useState } from "react";
+import { getAuthUserData } from "@/services/GlobalApi";
+import { useEffect, useState } from "react";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { AssistantContext } from "@/context/AssistantContext";
 
 function Provider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const convex = useConvex();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useAuth();
   const [assistant, setAssistant] = useState(null);
 
   const checkUseAuth = async () => {

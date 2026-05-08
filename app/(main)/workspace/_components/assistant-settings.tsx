@@ -60,7 +60,7 @@ function AssistantSettings() {
         <BlurFade delay={0.25}>
           <div className="flex gap-3 mt-4">
             <Image
-              className="rounded-xl h-[80px] w-[80px]"
+              className="rounded-xl h-[80px] w-[80px] object-cover"
               src={assistant?.image}
               alt="assistant"
               width={100}

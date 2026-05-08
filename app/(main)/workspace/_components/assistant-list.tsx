@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useConvex } from "convex/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { api } from "@/convex/_generated/api";
 import { AssistantType } from "@/types/assistant-type";
 import { AssistantContext } from "@/context/AssistantContext";
@@ -24,7 +24,7 @@ import { LogOut, UserCircle2 } from "lucide-react";
 import Profile from "./profile";
 
 function AssistantList() {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { assistant, setAssistant } = useContext(AssistantContext);
   const convex = useConvex();
 

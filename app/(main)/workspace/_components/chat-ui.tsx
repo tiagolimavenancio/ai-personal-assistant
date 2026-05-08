@@ -1,5 +1,6 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import axios from "axios";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,10 +10,9 @@ import { Loader2Icon, Send } from "lucide-react";
 import AiModelOptions from "@/services/AiModelOptions";
 import { AssistantContext } from "@/context/AssistantContext";
 import { MessageType } from "@/types/message-type";
-import Image from "next/image";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { AssistantType } from "@/types/assistant-type";
 
 function ChatUI() {
@@ -24,7 +24,7 @@ function ChatUI() {
   const messageRef = useRef<HTMLDivElement>(null);
 
   const updateTokens = useMutation(api.users.updateTokens);
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useAuth();
 
   useEffect(() => {
     if (messageRef.current) {
@@ -126,12 +126,15 @@ function ChatUI() {
       <div className="flex justify-between p-5 gap-5 absolute bottom-5 w-[94%]">
         <Input
           value={input}
-          disabled={loading}
+          disabled={loading || user?.credits <= 0}
           placeholder="Start typing here..."
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
         />
-        <Button onClick={onSendMessage}>
+        <Button
+          disabled={loading || user?.credits <= 0}
+          onClick={onSendMessage}
+        >
           <Send />
         </Button>
       </div>

@@ -47,11 +47,21 @@ export const updateTokens = mutation({
   args: {
     credits: v.number(),
     uid: v.id("users"),
+    orderId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const result = await ctx.db.patch(args.uid, {
-      credits: args.credits,
-    });
+    let result = null;
+
+    if (!args.orderId) {
+      result = await ctx.db.patch(args.uid, {
+        credits: args.credits,
+      });
+    } else {
+      result = await ctx.db.patch(args.uid, {
+        credits: args.credits,
+        orderId: args.orderId,
+      });
+    }
 
     return result;
   },

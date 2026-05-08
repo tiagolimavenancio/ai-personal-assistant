@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import AiAssistantsList from "@/services/AiAssistantsList";
@@ -7,7 +7,7 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { useConvex, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AssistantType } from "@/types/assistant-type";
@@ -18,7 +18,7 @@ function AiAssistants() {
     [],
   );
   const insertAssistant = useMutation(api.assistants.insertSelectedAssistants);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const convex = useConvex();
   const router = useRouter();
 

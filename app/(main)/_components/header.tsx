@@ -1,11 +1,10 @@
 "use client";
 
-import { useContext } from "react";
 import Image from "next/image";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 function Header() {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   return (
     <div className="p-3 fixed shadow-sm flex justify-between items-center px-14">

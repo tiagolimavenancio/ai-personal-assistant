@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -8,27 +8,43 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { WalletCardsIcon } from "lucide-react";
+import { Loader2Icon, WalletCardsIcon } from "lucide-react";
+import axios from "axios";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
 
 function Profile({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { user } = useContext(AuthContext);
-
+  const { user } = useAuth();
   const [maxTokens, setMaxTokens] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const updateUserOrder = useMutation(api.users.updateTokens);
 
   useEffect(() => {
     setMaxTokens(user?.orderId ? 10000 : 50000);
   }, [user?.orderId]);
+
+  const handleGenerateSubscription = async () => {
+    setLoading(true);
+    const result = await axios.post("/api/create-subscription");
+    console.log({ result });
+    setLoading(false);
+  };
+
+  const handleMakePayment = async (subscriptionId: string) => {};
+
+  const handleCancelSubscription = async () => {};
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{}</DialogTitle>
-          <DialogDescription asChild>
+          <DialogDescription>
             <div>
               <div className="flex gap-4 items-center">
                 <Image
@@ -59,19 +75,38 @@ function Profile({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </h2>
               </div>
 
-              <div className="mt-4 p-4 border rounded-xl">
-                <div className="flex justify-between">
-                  <div>
-                    <h2 className="font-bold text-lg">Pro Plan</h2>
-                    <h2>500,000 Tokens</h2>
+              {!user?.orderId ? (
+                <div className="mt-4 p-4 border rounded-xl">
+                  <div className="flex justify-between">
+                    <div>
+                      <h2 className="font-bold text-lg">Pro Plan</h2>
+                      <h2>500,000 Tokens</h2>
+                    </div>
+                    <h2 className="font-bold text-lg">$10/Month</h2>
                   </div>
-                  <h2 className="font-bold text-lg">$10 / Month</h2>
+                  <hr className="my-3" />
+                  <Button
+                    className="w-full"
+                    disabled={loading}
+                    onClick={handleGenerateSubscription}
+                  >
+                    {loading ? (
+                      <Loader2Icon className="animate-spin" />
+                    ) : (
+                      <WalletCardsIcon />
+                    )}
+                    Upgrade (10$)
+                  </Button>
                 </div>
-                <hr className="my-3" />
-                <Button className="w-full">
-                  <WalletCardsIcon /> Upgrade (10$)
+              ) : (
+                <Button
+                  className="mt-4 w-full"
+                  variant="secondary"
+                  onClick={handleCancelSubscription}
+                >
+                  Cancel Subscription
                 </Button>
-              </div>
+              )}
             </div>
           </DialogDescription>
         </DialogHeader>

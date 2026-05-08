@@ -29,7 +29,7 @@ import AssistantAvatar from "./assistant-avatar";
 import { toast } from "sonner";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { AssistantContext } from "@/context/AssistantContext";
 import { Loader2Icon } from "lucide-react";
 
@@ -45,11 +45,12 @@ const DEFAULT_ASSISTANT = {
 };
 
 function AddNewAssistant({ children }: any) {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { assistant, setAssistant } = useContext(AssistantContext);
 
   const [selectedAssistant, setSelectedAssistant] =
     useState<AssistantType>(DEFAULT_ASSISTANT);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const addAssistant = useMutation(api.assistants.insertSelectedAssistants);
@@ -87,7 +88,7 @@ function AddNewAssistant({ children }: any) {
   return (
     <Dialog>
       <form>
-        <DialogTrigger>{children}</DialogTrigger>
+        <DialogTrigger className="w-full">{children}</DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New Assistant</DialogTitle>
